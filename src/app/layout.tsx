@@ -15,9 +15,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Pixel Unit 도감",
   description: "유닛 정보 및 제작 재료 가이드",
-  icons: {
-    icon: "/favicon.png",
-  },
 };
 
 export default function RootLayout({
