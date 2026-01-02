@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Unit Optimizer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Pixel Unit Optimizer</h1>
+            <p>유닛 레벨을 최적화하여 DPS를 극대화하세요.</p>
+        </header>
+
+        <section class="dashboard">
+            <div class="stat-card">
+                <h3>총 DPS</h3>
+                <span id="total-dps">0</span>
+            </div>
+            <div class="stat-card">
+                <h3>골드 획득 배율</h3>
+                <span id="gold-multiplier">100%</span>
+            </div>
+             <div class="stat-card highlight">
+                <h3>추천 업그레이드</h3>
+                <span id="recommended-upgrade">-</span>
+                <button id="apply-upgrade">레벨업 적용</button>
+            </div>
+        </section>
+
+        <main>
+            <div class="unit-list-header">
+                <span>유닛 이름</span>
+                <span>현재 레벨</span>
+                <span>비용</span>
+                <span>DPS 기여도</span>
+            </div>
+            <div id="unit-list" class="unit-list">
+                <!-- Unit rows will be generated here -->
+            </div>
+        </main>
+    </div>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
