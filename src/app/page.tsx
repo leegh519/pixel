@@ -18,8 +18,56 @@ import {
   Sparkles, 
   Package,
   Layers,
-  Hammer
+  Hammer,
+  Trophy,
+  Star,
+  Swords,
+  Activity,
+  Coins
 } from "lucide-react";
+
+const RECOMMENDED_COMBINATIONS = [
+  {
+    title: "초저가 경제형",
+    subtitle: "총 재료 최소 소모",
+    description: "4성 중 환산 수치가 가장 낮은 5인방입니다. 빠르게 4성 스쿼드를 완성하고 싶을 때 최적입니다.",
+    units: [54, 47, 49, 27, 28], // 사무라이, 바이킹, 주술사, 성기사, 암흑기사
+    tags: ["환산 4,390", "초고속 완성", "무과금 추천"],
+    color: "emerald"
+  },
+  {
+    title: "병사 절약형",
+    subtitle: "병사 450개로 컷",
+    description: "병사가 부족할 때 마궁수와 대마법사를 섞어 병사 소모를 극한으로 줄이면서도 대마법사의 4.0 딜을 챙긴 실리 조합입니다.",
+    units: [54, 49, 47, 50, 26], // 사무라이, 주술사, 바이킹, 마궁수, 대마법사
+    tags: ["병사 450개", "대마법사 포함", "효율 극대화"],
+    color: "blue"
+  },
+  {
+    title: "최강 극딜형",
+    subtitle: "성장률 TOP 3 집중",
+    description: "성장률 4.0(대마법사), 3.8(사무라이), 3.6(템플러)를 모두 포함하여 800레벨 이후 폭발적인 화력을 보여줍니다.",
+    units: [26, 54, 51, 27, 47], // 대마법사, 사무라이, 템플러, 성기사, 바이킹
+    tags: ["성장률 4.0", "최대 화력", "800렙 깡패"],
+    color: "purple"
+  },
+  {
+    title: "공속 특화형",
+    subtitle: "4중 공속 중첩",
+    description: "주술사, 대마법사, 성기사, 감시자의 공속 버프를 중첩시켜 타격감을 극대화한 조합입니다.",
+    units: [49, 26, 27, 53, 54], // 주술사, 대마법사, 성기사, 감시자, 사무라이
+    tags: ["공속 중첩", "농부 활용", "빠른 타격"],
+    color: "orange"
+  },
+  {
+    title: "밸런스 정석",
+    subtitle: "주술사 & 사무라이 필수",
+    description: "가장 대중적이고 안정적인 재료 분포를 가진 조합입니다. 재료 쏠림이 적어 성장이 부드럽습니다.",
+    units: [49, 54, 26, 27, 47], // 주술사, 사무라이, 대마법사, 성기사, 바이킹
+    tags: ["정석 조합", "재료 균형", "안정적"],
+    color: "slate"
+  }
+];
 
 const getTier = (id: number) => {
   if (id <= 10) return 1;
@@ -105,11 +153,30 @@ export default function Home() {
 
       <main className="max-w-7xl mx-auto px-6 py-8">
         <Tabs defaultValue="recipe" className="space-y-12">
-          {/* 탭 메뉴 숨김 처리 */}
-          <div className="hidden">
-            <TabsList>
-              <TabsTrigger value="calculator">계산기</TabsTrigger>
-              <TabsTrigger value="recipe">도감</TabsTrigger>
+          {/* 탭 메뉴 */}
+          <div className="flex justify-center">
+            <TabsList className="bg-slate-900 border border-slate-800 p-1.5 h-16 rounded-2xl shadow-2xl">
+              <TabsTrigger 
+                value="recipe" 
+                className="px-10 md:px-14 h-full text-base font-bold transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-xl rounded-xl gap-2 cursor-pointer"
+              >
+                <BookOpen className="w-5 h-5" />
+                유닛 도감
+              </TabsTrigger>
+              <TabsTrigger 
+                value="recommend" 
+                className="px-10 md:px-14 h-full text-base font-bold transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-xl rounded-xl gap-2 cursor-pointer"
+              >
+                <Trophy className="w-5 h-5" />
+                추천 조합
+              </TabsTrigger>
+              <TabsTrigger 
+                value="calculator" 
+                className="px-10 md:px-14 h-full text-base font-bold transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-xl rounded-xl gap-2 cursor-pointer"
+              >
+                <Calculator className="w-5 h-5" />
+                계산기
+              </TabsTrigger>
             </TabsList>
           </div>
 
@@ -459,6 +526,112 @@ export default function Home() {
                       })}
                     </div>
                   </section>
+                );
+              })}
+            </div>
+          </TabsContent>
+
+          {/* 추천 조합 탭 */}
+          <TabsContent value="recommend" className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="max-w-4xl mx-auto text-center space-y-4 mb-8">
+              <h2 className="text-3xl font-black text-white tracking-tight">4성 최적 조합 가이드</h2>
+              <p className="text-slate-400 leading-relaxed uppercase text-xs font-black tracking-widest">
+                800레벨 기대 DPS와 1성 재료 효율을 분석한 5가지 핵심 전략
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {RECOMMENDED_COMBINATIONS.map((combo, idx) => {
+                // 이 조합의 총 1성 재료 합계 계산
+                const totalBreakdown: Record<number, number> = {};
+                combo.units.forEach(unitId => {
+                  const breakdown = getFullBreakdown(unitId, 1);
+                  Object.entries(breakdown).forEach(([id, count]) => {
+                    const bid = parseInt(id);
+                    totalBreakdown[bid] = (totalBreakdown[bid] || 0) + count;
+                  });
+                });
+
+                const totalUnits = Object.values(totalBreakdown).reduce((a, b) => a + b, 0);
+
+                return (
+                  <Card key={idx} className="bg-[#0B1120] border-slate-800 hover:border-blue-500/50 transition-all rounded-2xl overflow-hidden flex flex-col shadow-2xl group">
+                    <CardHeader className={`p-8 pb-6 border-b border-slate-800/50 bg-${combo.color}-600/10`}>
+                      <div className="flex justify-between items-start">
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <Star className={`w-5 h-5 text-${combo.color}-400 fill-${combo.color}-400/20`} />
+                            <CardTitle className="text-2xl text-white font-black tracking-tight">{combo.title}</CardTitle>
+                          </div>
+                          <p className="text-slate-400 font-bold text-sm">{combo.subtitle}</p>
+                        </div>
+                        <Badge className={`${getTierColor(4)} px-3 py-1 text-[10px]`}>BEST COMBO</Badge>
+                      </div>
+                    </CardHeader>
+                    
+                    <CardContent className="p-8 space-y-8 flex-grow">
+                      <p className="text-slate-300 text-sm leading-relaxed italic">"{combo.description}"</p>
+                      
+                      {/* 포함 유닛 */}
+                      <div className="space-y-4">
+                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                          <Swords className="w-4 h-4 text-blue-500" /> 조합 구성 유닛
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {combo.units.map(uid => (
+                            <div key={uid} className="bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl text-sm font-bold text-white shadow-inner">
+                              {unitMap[uid]?.name}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* 핵심 지표 */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/50">
+                          <div className="flex items-center gap-2 text-slate-500 mb-1">
+                            <Activity className="w-4 h-4" />
+                            <span className="text-[9px] font-black uppercase tracking-wider">예상 딜 등급</span>
+                          </div>
+                          <p className="text-xl font-black text-white">S-TIER</p>
+                        </div>
+                        <div className="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/50">
+                          <div className="flex items-center gap-2 text-slate-500 mb-1">
+                            <Layers className="w-4 h-4" />
+                            <span className="text-[9px] font-black uppercase tracking-wider">총 1성 환산</span>
+                          </div>
+                          <p className="text-xl font-black text-blue-400">{totalUnits.toLocaleString()}</p>
+                        </div>
+                      </div>
+
+                      {/* 주요 재료 소모 */}
+                      <div className="space-y-4">
+                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                          <Package className="w-4 h-4 text-emerald-500" /> 핵심 1성 재료 필요량
+                        </p>
+                        <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800/60 shadow-inner grid grid-cols-2 gap-x-8 gap-y-3">
+                          {Object.entries(totalBreakdown)
+                            .sort((a, b) => b[1] - a[1])
+                            .slice(0, 6) // 상위 6개만 표시
+                            .map(([bid, bcount]) => (
+                              <div key={bid} className="flex justify-between items-center text-xs">
+                                <span className="text-slate-400 font-medium">{unitMap[parseInt(bid)]?.name}</span>
+                                <span className="text-white font-black italic">x{bcount.toLocaleString()}</span>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+
+                      {/* 태그 */}
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {combo.tags.map(tag => (
+                          <span key={tag} className="text-[9px] font-black text-slate-500 border border-slate-800 px-3 py-1 rounded-full bg-slate-900/50">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
                 );
               })}
             </div>

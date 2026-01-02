@@ -13,8 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "픽셀도감",
-  description: "픽셀 유닛 도감",
+  title: "Pixel Unit 도감",
+  description: "유닛 정보 및 제작 재료 가이드",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
