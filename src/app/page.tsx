@@ -162,31 +162,31 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
         <Tabs defaultValue="recipe" className="space-y-12">
           {/* 탭 메뉴 */}
-          <div className="flex justify-center">
-            <TabsList className="bg-slate-900 border border-slate-800 p-1.5 h-16 rounded-2xl shadow-2xl">
+          <div className="flex justify-start sm:justify-center overflow-x-auto pb-2 scrollbar-hide">
+            <TabsList className="bg-slate-900 border border-slate-800 p-1 h-14 sm:h-16 rounded-xl sm:rounded-2xl shadow-2xl flex-shrink-0">
               <TabsTrigger 
                 value="recipe" 
-                className="px-10 md:px-14 h-full text-base font-bold transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-xl rounded-xl gap-2 cursor-pointer"
+                className="px-6 sm:px-10 md:px-14 h-full text-sm sm:text-base font-bold transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-xl rounded-lg sm:rounded-xl gap-2 cursor-pointer"
               >
-                <BookOpen className="w-5 h-5" />
-                유닛 도감
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="whitespace-nowrap">유닛 도감</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="recommend" 
-                className="px-10 md:px-14 h-full text-base font-bold transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-xl rounded-xl gap-2 cursor-pointer"
+                className="px-6 sm:px-10 md:px-14 h-full text-sm sm:text-base font-bold transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-xl rounded-lg sm:rounded-xl gap-2 cursor-pointer"
               >
-                <Trophy className="w-5 h-5" />
-                추천 조합
+                <Trophy className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="whitespace-nowrap">추천 조합</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="calculator" 
-                className="px-10 md:px-14 h-full text-base font-bold transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-xl rounded-xl gap-2 cursor-pointer"
+                className="px-6 sm:px-10 md:px-14 h-full text-sm sm:text-base font-bold transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-xl rounded-lg sm:rounded-xl gap-2 cursor-pointer"
               >
-                <Calculator className="w-5 h-5" />
-                계산기
+                <Calculator className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="whitespace-nowrap">계산기</span>
               </TabsTrigger>
             </TabsList>
           </div>
@@ -352,204 +352,165 @@ export default function Home() {
           </TabsContent>
 
           {/* 도감 탭 */}
-          <TabsContent value="recipe" className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <TabsContent value="recipe" className="space-y-6 sm:space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* 검색 및 필터 */}
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col md:flex-row justify-between items-end gap-6">
-                <div className="w-full md:max-w-md space-y-3">
-                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-1">유닛 검색</label>
-                  <div className="relative">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
-                    <Input 
-                      placeholder="유닛 이름을 입력하세요..." 
-                      className="pl-12 h-14 text-lg bg-slate-900 border-slate-800 text-white rounded-2xl focus:ring-blue-500"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">검색된 유닛 수</p>
-                  <p className="text-3xl font-black text-white">{filteredUnits.length}</p>
-                </div>
+            <div className="flex flex-col gap-6 bg-slate-900/50 p-6 rounded-2xl border border-slate-800 shadow-xl">
+              <div className="relative w-full">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <Input 
+                  placeholder="유닛 이름을 검색하세요..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="bg-slate-950 border-slate-800 pl-11 h-14 text-base focus:ring-blue-500 w-full rounded-xl"
+                />
               </div>
-
-              {/* 티어 필터 버튼 */}
-              <div className="flex flex-wrap gap-2">
-                <button 
-                  onClick={() => setSelectedTier("all")}
-                  className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all border ${
-                    selectedTier === 'all' 
-                    ? 'bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/20' 
-                    : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
-                  }`}
-                >
-                  전체
-                </button>
-                {[1, 2, 3, 4, 5].map(t => (
-                  <button 
-                    key={t}
-                    onClick={() => setSelectedTier(t.toString())}
-                    className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all border ${
-                      selectedTier === t.toString() 
-                      ? 'bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/20' 
-                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
-                    }`}
-                  >
-                    Tier {t}
-                  </button>
-                ))}
+              <div className="flex justify-center">
+                <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 w-full sm:w-auto overflow-x-auto scrollbar-hide">
+                  {['all', '1', '2', '3', '4', '5'].map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => setSelectedTier(t)}
+                      className={`px-6 sm:px-8 py-2.5 rounded-lg text-xs font-black transition-all whitespace-nowrap flex-grow sm:flex-grow-0 ${
+                        selectedTier === t 
+                          ? 'bg-blue-600 text-white shadow-lg' 
+                          : 'text-slate-500 hover:text-slate-300'
+                      }`}
+                    >
+                      {t === 'all' ? 'ALL' : `T${t}`}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* 티어별 유닛 목록 */}
-            <div className="space-y-16">
-              {[5, 4, 3, 2, 1].map(tier => {
-                const tierUnits = filteredUnits.filter(u => getTier(u.id) === tier);
-                if (tierUnits.length === 0) return null;
+            <div className="flex items-center gap-3 px-2">
+              <div className="h-px bg-slate-800 flex-grow" />
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                검색된 유닛 수: <span className="text-blue-400">{filteredUnits.length}</span>
+              </p>
+              <div className="h-px bg-slate-800 flex-grow" />
+            </div>
+
+            {/* 유닛 목록 그리드 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
+              {filteredUnits.map((u) => {
+                const tier = getTier(u.id);
+                const maxLv = tier === 1 ? 100 : tier === 2 ? 200 : tier === 3 ? 400 : 800;
+                const breakdown = getFullBreakdown(u.id, 1);
+                const totalBaseCount = Object.values(breakdown).reduce((a, b) => a + b, 0);
+                const dpsData = calculateBigDPS(u);
 
                 return (
-                  <section key={tier} className="space-y-6">
-                    <div className="flex items-center gap-4">
-                      <div className="h-px flex-grow bg-slate-800" />
-                      <div className="flex items-center gap-2">
-                        <Badge className={`${getTierColor(tier)} px-4 py-1.5 text-xs font-black rounded-lg border-2 uppercase tracking-tighter`}>
-                          Tier {tier}
+                  <Card key={u.id} className="bg-slate-900 border-slate-800 hover:border-blue-500/50 transition-all rounded-xl sm:rounded-2xl overflow-hidden flex flex-col shadow-2xl group">
+                    <CardHeader className="p-5 sm:p-8 pb-4 sm:pb-6 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-8 bg-blue-600/5 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2" />
+                      <div className="flex justify-between items-start relative z-10">
+                        <div className="space-y-1">
+                          <CardTitle className="text-xl sm:text-2xl text-white font-black tracking-tight group-hover:text-blue-400 transition-colors uppercase italic">{u.name}</CardTitle>
+                          <div className="flex items-center gap-2">
+                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-0.5">Rank {tier === 5 ? 4 : (tier === 4 ? 3 : (tier === 3 ? 2 : (tier === 2 ? 1 : 0)))} UNIT</p>
+                            <span className="text-[10px] text-slate-600 font-bold tracking-tight">| 환산 {totalBaseCount.toLocaleString()}</span>
+                          </div>
+                        </div>
+                        <Badge className={`${getTierColor(tier)} px-2.5 sm:px-3 py-1 text-[9px] sm:text-[10px] font-black border-none shadow-lg`}>
+                          TIER {tier}
                         </Badge>
-                        <h2 className="text-xl font-black text-white tracking-tight uppercase">
-                          {tier === 1 ? '기초 유닛' : '상위 유닛'}
-                        </h2>
                       </div>
-                      <div className="h-px flex-grow bg-slate-800" />
-                    </div>
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                      {tierUnits.map(unit => {
-                        const totalBaseCount = Object.values(getFullBreakdown(unit.id, 1)).reduce((a, b) => a + b, 0);
-                        
-                        return (
-                          <Card key={unit.id} className="bg-[#0B1120] border-slate-800 hover:border-blue-500/50 transition-all hover:-translate-y-1 hover:shadow-2xl shadow-blue-500/10 group overflow-hidden flex flex-col rounded-xl">
-                            <CardHeader className="p-5 pb-4 border-b border-slate-800/50 bg-slate-900/40">
-                              <div className="flex justify-between items-start">
-                                <CardTitle className="text-lg text-white font-black group-hover:text-blue-400 transition-colors uppercase tracking-tight">
-                                  {unit.name}
-                                </CardTitle>
-                                <div className="text-right">
-                                  <p className="text-blue-400 text-[10px] font-black uppercase tracking-widest">환산</p>
-                                  <p className="text-sm font-black text-white">{totalBaseCount.toLocaleString()}</p>
-                                </div>
-                              </div>
-                            </CardHeader>
-                            
-                            <CardContent className="p-5 space-y-6 flex-grow">
-                              {/* 스탯 표시 */}
-                              <div className="grid grid-cols-2 gap-3">
-                                <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/50">
-                                  <div className="flex items-center gap-1.5 text-slate-400 mb-1">
-                                    <Sword className="w-3.5 h-3.5" />
-                                    <span className="text-[9px] font-black uppercase tracking-wider">데미지</span>
-                                  </div>
-                                  <p className="text-sm font-black text-slate-100">{formatNumber(unit.baseDamage)}</p>
-                                </div>
-                                <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/50">
-                                  <div className="flex items-center gap-1.5 text-slate-400 mb-1">
-                                    <Zap className="w-3.5 h-3.5" />
-                                    <span className="text-[9px] font-black uppercase tracking-wider">공격 주기</span>
-                                  </div>
-                                  <p className="text-sm font-black text-slate-100">{unit.period}</p>
-                                </div>
-                                <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/50 col-span-2">
-                                  <div className="flex items-center gap-1.5 text-slate-400 mb-1">
-                                    <TrendingUp className="w-3.5 h-3.5" />
-                                    <span className="text-[9px] font-black uppercase tracking-wider">성장률</span>
-                                  </div>
-                                  <p className="text-sm font-black text-blue-400">{unit.growth.toFixed(3)}</p>
-                                </div>
-                                <div className="bg-blue-950/20 p-3 rounded-xl border border-blue-900/30 col-span-2">
-                                  <div className="flex items-center gap-1.5 text-blue-400 mb-1">
-                                    <Activity className="w-3.5 h-3.5" />
-                                    <span className="text-[9px] font-black uppercase tracking-wider">
-                                      {getTier(unit.id) === 1 ? '100레벨' : 
-                                       getTier(unit.id) === 2 ? '200레벨' : 
-                                       getTier(unit.id) === 3 ? '400레벨' : '800레벨'} DPS
-                                    </span>
-                                  </div>
-                                  <p className="text-sm font-black text-blue-300">
-                                    {calculateBigDPS(unit)}
-                                  </p>
-                                </div>
-                              </div>
+                    </CardHeader>
 
-                              {/* 제작 재료 - 직계 재료와 기초 재료 분리 */}
-                              {Object.keys(unit.recipe).length > 0 && (
-                                <div className="space-y-5">
-                                  {/* 직계 조합 재료 */}
-                                  <div className="space-y-3">
-                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 px-1">
-                                      <Package className="w-3.5 h-3.5 text-blue-500" /> 직계 조합 재료
-                                    </p>
-                                    <div className="bg-[#0f172a] p-4 rounded-xl border border-slate-800/60">
-                                      <div className="grid grid-cols-2 gap-x-6 gap-y-2.5">
-                                        {Object.entries(unit.recipe).map(([ingId, count]) => {
-                                          const ingredient = unitMap[parseInt(ingId)];
-                                          const tier = getTier(parseInt(ingId));
-                                          return (
-                                            <div key={ingId} className="flex justify-between items-center text-[11px]">
-                                              <div className="flex items-center gap-1.5">
-                                                <span className="text-slate-300 font-medium">{ingredient?.name}</span>
-                                                <span className="text-[8px] font-black text-slate-500 bg-slate-800/50 px-1.5 py-0.5 rounded">T{tier}</span>
-                                              </div>
-                                              <span className="text-blue-500 font-black">x{count}</span>
-                                            </div>
-                                          );
-                                        })}
-                                      </div>
+                    <CardContent className="p-5 sm:p-8 space-y-6 sm:space-y-8 flex-grow relative z-10">
+                      {/* 스탯 표시 */}
+                      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                        <div className="bg-slate-950/50 p-3 sm:p-4 rounded-xl border border-slate-800/50">
+                          <div className="flex items-center gap-1.5 text-slate-500 mb-1">
+                            <Sword className="w-3.5 h-3.5" />
+                            <span className="text-[9px] font-black uppercase tracking-wider">기본 데미지</span>
+                          </div>
+                          <p className="text-xs sm:text-sm font-black text-white">{formatNumber(u.baseDamage)}</p>
+                        </div>
+                        <div className="bg-slate-950/50 p-3 sm:p-4 rounded-xl border border-slate-800/50">
+                          <div className="flex items-center gap-1.5 text-slate-500 mb-1">
+                            <Zap className="w-3.5 h-3.5" />
+                            <span className="text-[9px] font-black uppercase tracking-wider">공격 주기</span>
+                          </div>
+                          <p className="text-xs sm:text-sm font-black text-white">{u.period * 100}ms</p>
+                        </div>
+                        <div className="bg-slate-950/50 p-3 sm:p-4 rounded-xl border border-slate-800/50">
+                          <div className="flex items-center gap-1.5 text-slate-500 mb-1">
+                            <TrendingUp className="w-3.5 h-3.5" />
+                            <span className="text-[9px] font-black uppercase tracking-wider">성장률</span>
+                          </div>
+                          <p className="text-xs sm:text-sm font-black text-blue-400">{u.growth}</p>
+                        </div>
+                        <div className="bg-blue-600/10 p-3 sm:p-4 rounded-xl border border-blue-500/20">
+                          <div className="flex items-center gap-1.5 text-blue-400 mb-1">
+                            <Activity className="w-3.5 h-3.5" />
+                            <span className="text-[9px] font-black uppercase tracking-wider">{maxLv}레벨 DPS</span>
+                          </div>
+                          <p className="text-xs sm:text-sm font-black text-blue-400">{dpsData}</p>
+                        </div>
+                      </div>
+
+                      {/* 제작 재료 */}
+                      {Object.keys(u.recipe).length > 0 && (
+                        <div className="space-y-6 sm:space-y-8">
+                          <div className="space-y-3">
+                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                              <Package className="w-4 h-4 text-blue-500" /> 직계 조합 재료
+                            </p>
+                            <div className="bg-slate-950 p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-800/60 shadow-inner">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+                                {Object.entries(u.recipe).map(([ingId, count]) => (
+                                  <div key={ingId} className="flex justify-between items-center text-[10px] sm:text-xs">
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="text-slate-400 font-medium">{unitMap[parseInt(ingId)]?.name}</span>
+                                      <Badge variant="outline" className="text-[8px] py-0 px-1 border-slate-800 text-slate-600 uppercase">T{getTier(parseInt(ingId))}</Badge>
                                     </div>
+                                    <span className="text-white font-black italic">x{count}</span>
                                   </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
 
-                                  {/* 1성 기초 재료 분해 */}
-                                  <div className="space-y-3">
-                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 px-1">
-                                      <Sparkles className="w-3.5 h-3.5 text-emerald-500" /> 1성 기초 재료
-                                    </p>
-                                    <div className="bg-[#0f172a] p-4 rounded-xl border border-slate-800/60">
-                                      <div className="grid grid-cols-2 gap-x-6 gap-y-2.5">
-                                        {Object.entries(getFullBreakdown(unit.id, 1))
-                                          .sort((a, b) => b[1] - a[1])
-                                          .map(([baseId, baseCount]) => (
-                                            <div key={baseId} className="flex justify-between items-center text-[11px]">
-                                              <span className="text-slate-300 font-medium">{unitMap[parseInt(baseId)]?.name}</span>
-                                              <span className="text-white font-black">x{baseCount}</span>
-                                            </div>
-                                          ))}
-                                      </div>
+                          <div className="space-y-3">
+                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                              <Sparkles className="w-4 h-4 text-emerald-500" /> 1성 기초 재료 상세
+                            </p>
+                            <div className="bg-slate-950 p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-800/60 shadow-inner">
+                              <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2">
+                                {Object.entries(breakdown)
+                                  .sort((a, b) => b[1] - a[1])
+                                  .map(([bid, bcount]) => (
+                                    <div key={bid} className="flex justify-between items-center text-[10px]">
+                                      <span className="text-slate-400 font-medium truncate mr-1.5">{unitMap[parseInt(bid)]?.name}</span>
+                                      <span className="text-white font-black italic shrink-0">x{bcount}</span>
                                     </div>
-                                  </div>
-                                </div>
-                              )}
+                                  ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
 
-                              {/* 특수 능력 */}
-                              {unit.traits.length > 0 && (
-                                <div className="space-y-2.5">
-                                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 px-1">
-                                    <Sparkles className="w-3.5 h-3.5" /> 특수 능력
-                                  </p>
-                                  <div className="space-y-1.5">
-                                    {unit.traits.map((trait, idx) => (
-                                      <div key={idx} className="text-[10px] text-slate-200 bg-blue-500/5 border border-blue-500/10 px-3 py-2 rounded-lg flex justify-between items-center italic">
-                                        <span>{trait.name}</span>
-                                        <span className="text-blue-400 font-black">x{trait.growth}</span>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
-                            </CardContent>
-                          </Card>
-                        );
-                      })}
-                    </div>
-                  </section>
+                      {/* 특성 */}
+                      {u.traits.length > 0 && (
+                        <div className="space-y-3">
+                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                            <TrendingUp className="w-4 h-4 text-purple-500" /> 유닛 특성 및 버프
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {u.traits.map((trait, idx) => (
+                              <div key={idx} className="bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-lg text-[10px] font-bold text-slate-300 flex items-center gap-2">
+                                <span>{trait.name}</span>
+                                <span className="text-blue-500 uppercase">x{trait.growth}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 );
               })}
             </div>
