@@ -28,44 +28,40 @@ import {
 
 const RECOMMENDED_COMBINATIONS = [
   {
-    title: "초저가 경제형",
-    subtitle: "총 재료 최소 소모",
-    description: "4성 중 환산 수치가 가장 낮은 5인방입니다. 빠르게 4성 스쿼드를 완성하고 싶을 때 최적입니다.",
-    units: [54, 47, 49, 27, 28], // 사무라이, 바이킹, 주술사, 성기사, 암흑기사
-    tags: ["환산 4,390", "초고속 완성", "무과금 추천"],
-    color: "emerald"
+    title: "최적 밸런스 시너지",
+    subtitle: "동료 버프 & 유틸 정석",
+    description: "대마법사와 주술사를 필두로 공속과 데미지 버프를 빈틈없이 채운 가장 안정적인 조합입니다.",
+    units: [26, 49, 27, 46, 53], // 대마법사, 주술사, 성기사, 야수조련사, 감시자
+    tags: ["강력 추천", "올라운더", "재료 균형"],
+    color: "blue",
+    tier: 4
   },
   {
-    title: "병사 절약형",
-    subtitle: "병사 450개로 컷",
-    description: "병사가 부족할 때 마궁수와 대마법사를 섞어 병사 소모를 극한으로 줄이면서도 대마법사의 4.0 딜을 챙긴 실리 조합입니다.",
-    units: [54, 49, 47, 50, 26], // 사무라이, 주술사, 바이킹, 마궁수, 대마법사
-    tags: ["병사 450개", "대마법사 포함", "효율 극대화"],
-    color: "blue"
+    title: "종결급 화력 조합",
+    subtitle: "4성 최고의 DPS 시너지",
+    description: "성장률 4.0의 대마법사를 중심으로 동료 데미지 버프를 가진 최강 유닛들을 배치했습니다.",
+    units: [26, 54, 51, 27, 49], // 대마법사, 사무라이, 템플러, 성기사, 주술사
+    tags: ["동료데미지 5", "공속버프 4", "최강 화력"],
+    color: "purple",
+    tier: 4
   },
   {
-    title: "최강 극딜형",
-    subtitle: "성장률 TOP 3 집중",
-    description: "성장률 4.0(대마법사), 3.8(사무라이), 3.6(템플러)를 모두 포함하여 800레벨 이후 폭발적인 화력을 보여줍니다.",
-    units: [26, 54, 51, 27, 47], // 대마법사, 사무라이, 템플러, 성기사, 바이킹
-    tags: ["성장률 4.0", "최대 화력", "800렙 깡패"],
-    color: "purple"
+    title: "5성 빌드업 정석",
+    subtitle: "차세대 성장을 위한 밑거름",
+    description: "최종 5성 유닛들(초월자, 시공술사 등)의 핵심 재료가 되는 4성 유닛들로 구성된 예비 종결 조합입니다.",
+    units: [26, 27, 28, 51, 47], // 대마법사, 성기사, 암흑기사, 템플러, 바이킹
+    tags: ["5성 준비", "재료 선점", "높은 범용성"],
+    color: "emerald",
+    tier: 4
   },
   {
-    title: "공속 특화형",
-    subtitle: "4중 공속 중첩",
-    description: "주술사, 대마법사, 성기사, 감시자의 공속 버프를 중첩시켜 타격감을 극대화한 조합입니다.",
-    units: [49, 26, 27, 53, 54], // 주술사, 대마법사, 성기사, 감시자, 사무라이
-    tags: ["공속 중첩", "농부 활용", "빠른 타격"],
-    color: "orange"
-  },
-  {
-    title: "밸런스 정석",
-    subtitle: "주술사 & 사무라이 필수",
-    description: "가장 대중적이고 안정적인 재료 분포를 가진 조합입니다. 재료 쏠림이 적어 성장이 부드럽습니다.",
-    units: [49, 54, 26, 27, 47], // 주술사, 사무라이, 대마법사, 성기사, 바이킹
-    tags: ["정석 조합", "재료 균형", "안정적"],
-    color: "slate"
+    title: "신적 존재의 강림",
+    subtitle: "T5 종결 스쿼드",
+    description: "성장률 6.5~7.2에 달하는 신계의 유닛들입니다. 제작은 매우 어려우나 완성 시 비교 불가능한 화력을 뿜어냅니다.",
+    units: [56, 57, 58, 59, 61], // 초월자, 시공술사, 공허의마법사, 팔라딘, 스칼드
+    tags: ["T5 종결", "성장률 7.2", "최종 목적지"],
+    color: "orange",
+    tier: 5
   }
 ];
 
@@ -88,11 +84,35 @@ const getTierColor = (tier: number) => {
   }
 };
 
-const formatNumber = (num: number) => {
+const formatNumber = (num: number | string) => {
+  if (typeof num === 'string') return num;
+  if (num === Infinity) return "∞";
   if (num >= 10000) {
     return num.toExponential(2).replace('+', '');
   }
   return num.toLocaleString();
+};
+
+const calculateBigDPS = (unit: Unit) => {
+  const tier = getTier(unit.id);
+  let maxLevel = 800;
+  if (tier === 1) maxLevel = 100;
+  else if (tier === 2) maxLevel = 200;
+  else if (tier === 3) maxLevel = 400;
+  
+  const level = maxLevel - 1; // 성장은 레벨-1회 발생
+  const baseDamage = unit.baseDamage;
+  const growth = unit.growth;
+  const attackInterval = unit.period * 0.1;
+
+  // log10(DPS) = log10(baseDamage) + level * log10(growth) - log10(interval)
+  const logDPS = Math.log10(baseDamage) + level * Math.log10(growth) - Math.log10(attackInterval);
+  
+  const exponent = Math.floor(logDPS);
+  const mantissa = Math.pow(10, logDPS - exponent);
+
+  if (exponent < 4) return (Math.pow(10, logDPS)).toLocaleString(undefined, { maximumFractionDigits: 0 });
+  return `${mantissa.toFixed(2)}e${exponent}`;
 };
 
 const unitMap: Record<number, Unit> = {};
@@ -454,6 +474,19 @@ export default function Home() {
                                   </div>
                                   <p className="text-sm font-black text-blue-400">{unit.growth.toFixed(3)}</p>
                                 </div>
+                                <div className="bg-blue-950/20 p-3 rounded-xl border border-blue-900/30 col-span-2">
+                                  <div className="flex items-center gap-1.5 text-blue-400 mb-1">
+                                    <Activity className="w-3.5 h-3.5" />
+                                    <span className="text-[9px] font-black uppercase tracking-wider">
+                                      {getTier(unit.id) === 1 ? '100레벨' : 
+                                       getTier(unit.id) === 2 ? '200레벨' : 
+                                       getTier(unit.id) === 3 ? '400레벨' : '800레벨'} DPS
+                                    </span>
+                                  </div>
+                                  <p className="text-sm font-black text-blue-300">
+                                    {calculateBigDPS(unit)}
+                                  </p>
+                                </div>
                               </div>
 
                               {/* 제작 재료 - 직계 재료와 기초 재료 분리 */}
@@ -540,98 +573,138 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {RECOMMENDED_COMBINATIONS.map((combo, idx) => {
-                // 이 조합의 총 1성 재료 합계 계산
-                const totalBreakdown: Record<number, number> = {};
-                combo.units.forEach(unitId => {
-                  const breakdown = getFullBreakdown(unitId, 1);
-                  Object.entries(breakdown).forEach(([id, count]) => {
-                    const bid = parseInt(id);
-                    totalBreakdown[bid] = (totalBreakdown[bid] || 0) + count;
-                  });
-                });
-
-                const totalUnits = Object.values(totalBreakdown).reduce((a, b) => a + b, 0);
+            <div className="space-y-16">
+              {[4, 5].map(tier => {
+                const tierCombos = RECOMMENDED_COMBINATIONS.filter(c => c.tier === tier);
+                if (tierCombos.length === 0) return null;
 
                 return (
-                  <Card key={idx} className="bg-[#0B1120] border-slate-800 hover:border-blue-500/50 transition-all rounded-2xl overflow-hidden flex flex-col shadow-2xl group">
-                    <CardHeader className={`p-8 pb-6 border-b border-slate-800/50 bg-${combo.color}-600/10`}>
-                      <div className="flex justify-between items-start">
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <Star className={`w-5 h-5 text-${combo.color}-400 fill-${combo.color}-400/20`} />
-                            <CardTitle className="text-2xl text-white font-black tracking-tight">{combo.title}</CardTitle>
-                          </div>
-                          <p className="text-slate-400 font-bold text-sm">{combo.subtitle}</p>
-                        </div>
-                        <Badge className={`${getTierColor(4)} px-3 py-1 text-[10px]`}>BEST COMBO</Badge>
-                      </div>
-                    </CardHeader>
-                    
-                    <CardContent className="p-8 space-y-8 flex-grow">
-                      <p className="text-slate-300 text-sm leading-relaxed italic">"{combo.description}"</p>
-                      
-                      {/* 포함 유닛 */}
-                      <div className="space-y-4">
-                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                          <Swords className="w-4 h-4 text-blue-500" /> 조합 구성 유닛
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {combo.units.map(uid => (
-                            <div key={uid} className="bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl text-sm font-bold text-white shadow-inner">
-                              {unitMap[uid]?.name}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
+                  <div key={tier} className="space-y-8">
+                    <div className="flex items-center gap-4 px-2">
+                      <div className="h-px flex-grow bg-slate-800"></div>
+                      <h3 className="text-xl font-black text-white flex items-center gap-2">
+                        <Star className={`w-5 h-5 ${tier === 5 ? 'text-orange-400' : 'text-blue-400'}`} />
+                        Tier {tier} 추천 조합
+                      </h3>
+                      <div className="h-px flex-grow bg-slate-800"></div>
+                    </div>
 
-                      {/* 핵심 지표 */}
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/50">
-                          <div className="flex items-center gap-2 text-slate-500 mb-1">
-                            <Activity className="w-4 h-4" />
-                            <span className="text-[9px] font-black uppercase tracking-wider">예상 딜 등급</span>
-                          </div>
-                          <p className="text-xl font-black text-white">S-TIER</p>
-                        </div>
-                        <div className="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/50">
-                          <div className="flex items-center gap-2 text-slate-500 mb-1">
-                            <Layers className="w-4 h-4" />
-                            <span className="text-[9px] font-black uppercase tracking-wider">총 1성 환산</span>
-                          </div>
-                          <p className="text-xl font-black text-blue-400">{totalUnits.toLocaleString()}</p>
-                        </div>
-                      </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                      {tierCombos.map((combo, idx) => {
+                        // 이 조합의 총 1성 재료 합계 계산
+                        const totalBreakdown: Record<number, number> = {};
+                        combo.units.forEach(unitId => {
+                          const breakdown = getFullBreakdown(unitId, 1);
+                          Object.entries(breakdown).forEach(([id, count]) => {
+                            const bid = parseInt(id);
+                            totalBreakdown[bid] = (totalBreakdown[bid] || 0) + count;
+                          });
+                        });
 
-                      {/* 주요 재료 소모 */}
-                      <div className="space-y-4">
-                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                          <Package className="w-4 h-4 text-emerald-500" /> 핵심 1성 재료 필요량
-                        </p>
-                        <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800/60 shadow-inner grid grid-cols-2 gap-x-8 gap-y-3">
-                          {Object.entries(totalBreakdown)
-                            .sort((a, b) => b[1] - a[1])
-                            .slice(0, 6) // 상위 6개만 표시
-                            .map(([bid, bcount]) => (
-                              <div key={bid} className="flex justify-between items-center text-xs">
-                                <span className="text-slate-400 font-medium">{unitMap[parseInt(bid)]?.name}</span>
-                                <span className="text-white font-black italic">x{bcount.toLocaleString()}</span>
+                        const totalUnits = Object.values(totalBreakdown).reduce((a, b) => a + b, 0);
+
+                        // 이 조합의 각 티어별 만렙 총합 DPS 계산 (로그 합산 방식)
+                        let maxLogDPS = -Infinity;
+                        combo.units.forEach(unitId => {
+                          const unit = unitMap[unitId];
+                          if (!unit) return;
+                          const uTier = getTier(unit.id);
+                          let mLevel = 800;
+                          if (uTier === 1) mLevel = 100;
+                          else if (uTier === 2) mLevel = 200;
+                          else if (uTier === 3) mLevel = 400;
+                          
+                          const currentLogDPS = Math.log10(unit.baseDamage) + (mLevel - 1) * Math.log10(unit.growth) - Math.log10(unit.period * 0.1);
+                          if (currentLogDPS > maxLogDPS) maxLogDPS = currentLogDPS;
+                        });
+                        
+                        const exp = Math.floor(maxLogDPS);
+                        const mant = Math.pow(10, maxLogDPS - exp);
+                        const comboTotalDPS = exp < 4 ? Math.pow(10, maxLogDPS).toLocaleString() : `${mant.toFixed(2)}e${exp}`;
+
+                        return (
+                          <Card key={idx} className="bg-[#0B1120] border-slate-800 hover:border-blue-500/50 transition-all rounded-2xl overflow-hidden flex flex-col shadow-2xl group">
+                            <CardHeader className={`p-8 pb-6 border-b border-slate-800/50 bg-${combo.color}-600/10`}>
+                              <div className="flex justify-between items-start">
+                                <div className="space-y-1">
+                                  <div className="flex items-center gap-2">
+                                    <Star className={`w-5 h-5 text-${combo.color}-400 fill-${combo.color}-400/20`} />
+                                    <CardTitle className="text-2xl text-white font-black tracking-tight">{combo.title}</CardTitle>
+                                  </div>
+                                  <p className="text-slate-400 font-bold text-sm">{combo.subtitle}</p>
+                                </div>
+                                <Badge className={`${getTierColor(tier)} px-3 py-1 text-[10px]`}>
+                                  {tier === 5 ? 'END-GAME' : 'BEST 4-STAR'}
+                                </Badge>
                               </div>
-                            ))}
-                        </div>
-                      </div>
+                            </CardHeader>
+                            
+                            <CardContent className="p-8 space-y-8 flex-grow">
+                              <p className="text-slate-300 text-sm leading-relaxed italic">"{combo.description}"</p>
+                              
+                              {/* 포함 유닛 */}
+                              <div className="space-y-4">
+                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                  <Swords className="w-4 h-4 text-blue-500" /> 조합 구성 유닛
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                  {combo.units.map(uid => (
+                                    <div key={uid} className="bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl text-sm font-bold text-white shadow-inner">
+                                      {unitMap[uid]?.name}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
 
-                      {/* 태그 */}
-                      <div className="flex flex-wrap gap-2 pt-2">
-                        {combo.tags.map(tag => (
-                          <span key={tag} className="text-[9px] font-black text-slate-500 border border-slate-800 px-3 py-1 rounded-full bg-slate-900/50">
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
+                              {/* 핵심 지표 */}
+                              <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/50">
+                                  <div className="flex items-center gap-2 text-slate-500 mb-1">
+                                    <Activity className="w-4 h-4" />
+                                    <span className="text-[9px] font-black uppercase tracking-wider">만렙 총합 DPS</span>
+                                  </div>
+                                  <p className="text-xl font-black text-white">{comboTotalDPS}</p>
+                                </div>
+                                <div className="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/50">
+                                  <div className="flex items-center gap-2 text-slate-500 mb-1">
+                                    <Layers className="w-4 h-4" />
+                                    <span className="text-[9px] font-black uppercase tracking-wider">총 1성 환산</span>
+                                  </div>
+                                  <p className="text-xl font-black text-blue-400">{totalUnits.toLocaleString()}</p>
+                                </div>
+                              </div>
+
+                              {/* 전체 재료 소모 */}
+                              <div className="space-y-4">
+                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                  <Package className="w-4 h-4 text-emerald-500" /> 모든 1성 기초 재료 필요량
+                                </p>
+                                <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800/60 shadow-inner grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-3">
+                                  {Object.entries(totalBreakdown)
+                                    .sort((a, b) => b[1] - a[1])
+                                    .map(([bid, bcount]) => (
+                                      <div key={bid} className="flex justify-between items-center text-[10px]">
+                                        <span className="text-slate-400 font-medium truncate mr-2">{unitMap[parseInt(bid)]?.name}</span>
+                                        <span className="text-white font-black italic shrink-0">x{bcount.toLocaleString()}</span>
+                                      </div>
+                                    ))}
+                                </div>
+                              </div>
+
+                              {/* 태그 */}
+                              <div className="flex flex-wrap gap-2 pt-2">
+                                {combo.tags.map(tag => (
+                                  <span key={tag} className="text-[9px] font-black text-slate-500 border border-slate-800 px-3 py-1 rounded-full bg-slate-900/50">
+                                    #{tag}
+                                  </span>
+                                ))}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        );
+                      })}
+                    </div>
+                  </div>
                 );
               })}
             </div>
