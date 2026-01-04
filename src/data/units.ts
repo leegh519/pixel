@@ -91,7 +91,7 @@ export const units: Unit[] = [
   { id: 54, name: "사무라이", baseDamage: 70000000000, period: 6, growth: 3.8, traits: [{ name: "스와이프 주기 감소", base: 0.925, growth: 0.985 }, { name: "탭 데미지 배율", base: 50000, growth: 4 }, { name: "동료 데미지 배율", base: 50000, growth: 4 }], recipe: { 1: 20, 36: 60, 12: 80 } },
 
   // T4 최상급 조합 (Rank 4 in CSV)
-  { id: 55, name: "야수군주", baseDamage: 3000000000000000, period: 4, growth: 6.4, traits: [], recipe: { 1: 30, 46: 8, 43: 8 } },
+  { id: 55, name: "야수군주", baseDamage: 3000000000000000, period: 4, growth: 7.5, traits: [], recipe: { 1: 30, 46: 8, 43: 8 } },
   { id: 56, name: "초월자", baseDamage: 150000000000000, period: 5, growth: 7.0, traits: [{ name: "탭 데미지 배율", base: 5000000, growth: 10 }, { name: "동료 데미지 배율", base: 5000000, growth: 10 }, { name: "골드 드랍 배율", base: 5000000, growth: 10 }, { name: "동료 공격 주기 감소", base: 0.9, growth: 0.98 }], recipe: { 1: 30, 27: 6, 26: 6 } },
   { id: 57, name: "시공술사", baseDamage: 80000000000000, period: 10, growth: 7.2, traits: [{ name: "동료 공격 주기 감소", base: 0.9, growth: 0.98 }, { name: "스와이프 주기 감소", base: 0.9, growth: 0.98 }, { name: "동료 데미지 배율", base: 5000000, growth: 10 }, { name: "골드 드랍 배율", base: 5000000, growth: 10 }], recipe: { 1: 30, 26: 6, 45: 8 } },
   { id: 58, name: "공허의마법사", baseDamage: 200000000000000, period: 15, growth: 6.8, traits: [{ name: "동료 데미지 배율", base: 5000000, growth: 10 }, { name: "주기적 아이템 획득", base: 10, growth: 1 }, { name: "동료 공격 주기 감소", base: 0.9, growth: 0.98 }, { name: "스와이프 주기 감소", base: 0.9, growth: 0.98 }], recipe: { 1: 30, 28: 7, 26: 6 } },
