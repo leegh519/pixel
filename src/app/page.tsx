@@ -174,7 +174,7 @@ export default function Home() {
                 <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span className="whitespace-nowrap">유닛 도감</span>
               </TabsTrigger>
-              <TabsTrigger 
+              {/* <TabsTrigger 
                 value="recommend" 
                 className="px-6 sm:px-10 md:px-14 h-full text-sm sm:text-base font-bold transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-xl rounded-lg sm:rounded-xl gap-2 cursor-pointer"
               >
@@ -187,14 +187,14 @@ export default function Home() {
               >
                 <Calculator className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span className="whitespace-nowrap">계산기</span>
-              </TabsTrigger>
+              </TabsTrigger> */}
             </TabsList>
           </div>
 
           {/* 계산기 탭 */}
-          <TabsContent value="calculator" className="space-y-6">
+          {/* <TabsContent value="calculator" className="space-y-6">
             <div className="grid lg:grid-cols-3 gap-6">
-              {/* 입력 및 총합 영역 (왼쪽 1컬럼) */}
+              ... (Calculator content omitted for brevity in comment) ...
               <div className="lg:col-span-1 space-y-6">
                 <Card className="bg-slate-900 border-slate-800 shadow-xl">
                   <CardHeader className="pb-4">
@@ -249,10 +249,8 @@ export default function Home() {
                 </Card>
               </div>
 
-              {/* 조합 상세 (오른쪽 2컬럼) */}
               <div className="lg:col-span-2 space-y-8">
                 <div className="grid md:grid-cols-2 gap-8 items-start">
-                  {/* 직계 조합 재료 */}
                   <Card className="bg-[#0B1120] border-slate-800 shadow-2xl overflow-hidden rounded-xl">
                     <CardHeader className="pb-5 px-6 pt-6">
                       <CardTitle className="text-xl text-white font-bold">직계 조합 재료</CardTitle>
@@ -289,7 +287,6 @@ export default function Home() {
                                   </div>
                                 </div>
 
-                                {/* 해당 재료의 하위 조합법 */}
                                 {Object.keys(ingredient?.recipe || {}).length > 0 && (
                                   <div className="bg-slate-950/50 rounded-xl p-4 border border-slate-800/50 space-y-2">
                                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
@@ -323,7 +320,6 @@ export default function Home() {
                     </CardContent>
                   </Card>
 
-                  {/* 기초 재료 상세 */}
                   <Card className="bg-[#0B1120] border-slate-800 shadow-2xl overflow-hidden rounded-xl">
                     <CardHeader className="pb-5 px-6 pt-6">
                       <CardTitle className="text-xl text-white font-bold">기초 재료 상세</CardTitle>
@@ -349,7 +345,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </TabsContent>
+          </TabsContent> */}
 
           {/* 도감 탭 */}
           <TabsContent value="recipe" className="space-y-6 sm:space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -517,7 +513,8 @@ export default function Home() {
           </TabsContent>
 
           {/* 추천 조합 탭 */}
-          <TabsContent value="recommend" className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          {/* <TabsContent value="recommend" className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            ... (Recommend content omitted for brevity in comment) ...
             <div className="max-w-4xl mx-auto text-center space-y-4 mb-8">
               <h2 className="text-3xl font-black text-white tracking-tight">4성 최적 조합 가이드</h2>
               <p className="text-slate-400 leading-relaxed uppercase text-xs font-black tracking-widest">
@@ -543,7 +540,6 @@ export default function Home() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       {tierCombos.map((combo, idx) => {
-                        // 이 조합의 총 1성 재료 합계 계산
                         const totalBreakdown: Record<number, number> = {};
                         combo.units.forEach(unitId => {
                           const breakdown = getFullBreakdown(unitId, 1);
@@ -555,7 +551,6 @@ export default function Home() {
 
                         const totalUnits = Object.values(totalBreakdown).reduce((a, b) => a + b, 0);
 
-                        // 이 조합의 각 티어별 만렙 총합 DPS 계산 (로그 합산 방식)
                         let maxLogDPS = -Infinity;
                         combo.units.forEach(unitId => {
                           const unit = unitMap[unitId];
@@ -594,7 +589,6 @@ export default function Home() {
                             <CardContent className="p-8 space-y-8 flex-grow">
                               <p className="text-slate-300 text-sm leading-relaxed italic">"{combo.description}"</p>
                               
-                              {/* 포함 유닛 */}
                               <div className="space-y-4">
                                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
                                   <Swords className="w-4 h-4 text-blue-500" /> 조합 구성 유닛
@@ -608,7 +602,6 @@ export default function Home() {
                                 </div>
                               </div>
 
-                              {/* 핵심 지표 */}
                               <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/50">
                                   <div className="flex items-center gap-2 text-slate-500 mb-1">
@@ -626,7 +619,6 @@ export default function Home() {
                                 </div>
                               </div>
 
-                              {/* 전체 재료 소모 */}
                               <div className="space-y-4">
                                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
                                   <Package className="w-4 h-4 text-emerald-500" /> 모든 1성 기초 재료 필요량
@@ -643,7 +635,6 @@ export default function Home() {
                                 </div>
                               </div>
 
-                              {/* 태그 */}
                               <div className="flex flex-wrap gap-2 pt-2">
                                 {combo.tags.map(tag => (
                                   <span key={tag} className="text-[9px] font-black text-slate-500 border border-slate-800 px-3 py-1 rounded-full bg-slate-900/50">
@@ -660,7 +651,7 @@ export default function Home() {
                 );
               })}
             </div>
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
       </main>
     </div>
